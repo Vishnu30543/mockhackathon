@@ -39,9 +39,10 @@ exports.loginLearner = async (req, res) => {
   }
 };
 
-// 📌 Get All Courses
+// 📌 Get All Courses (Public)
 exports.getCourses = async (req, res) => {
   try {
+    console.log("Fetching learner all courses");
     const courses = await Course.find().populate('trainer', 'name email');
     res.status(200).json(courses);
   } catch (err) {
@@ -49,11 +50,12 @@ exports.getCourses = async (req, res) => {
   }
 };
 
-// 📌 Submit Feedback
+// 📌 Submit Feedback (Protected)
 exports.giveFeedback = async (req, res) => {
   try {
     const { courseId } = req.params;
-    const { learnerId, comment, rating } = req.body;
+    const { comment, rating } = req.body;
+    const learnerId = req.user.id; // From JWT middleware
 
     const course = await Course.findById(courseId);
     if (!course) return res.status(404).json({ message: 'Course not found' });

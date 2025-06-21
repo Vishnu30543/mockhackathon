@@ -8,15 +8,13 @@ exports.registerTrainer = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    // Check if trainer already exists
     const existing = await Trainer.findOne({ email });
     if (existing) return res.status(400).json({ message: 'Trainer already exists' });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const trainer = new Trainer({ name, email, password: hashedPassword });
-    await trainer.save();
 
+    await trainer.save();
     res.status(201).json({ message: 'Trainer registered successfully' });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -41,10 +39,11 @@ exports.loginTrainer = async (req, res) => {
   }
 };
 
-// 📌 Create Course
+// 📌 Create Course (Protected)
 exports.createCourse = async (req, res) => {
   try {
-    const { title, description, sessions, trainerId } = req.body;
+    const { title, description, sessions } = req.body;
+    const trainerId = req.user.id; // from JWT middleware
 
     if (!sessions || sessions.length !== 9) {
       return res.status(400).json({ message: 'Exactly 9 sessions are required' });
@@ -64,11 +63,11 @@ exports.createCourse = async (req, res) => {
   }
 };
 
-// 📌 Get All Courses by Trainer
+// 📌 Get All Courses by Trainer (Protected)
 exports.getTrainerCourses = async (req, res) => {
   try {
-    const { trainerId } = req.query;
-
+    const trainerId = req.user.id; // from JWT
+    console.log("Fetching trainer courses for ID:", trainerId);
     const courses = await Course.find({ trainer: trainerId });
     res.status(200).json(courses);
   } catch (err) {

@@ -13,10 +13,10 @@ router.post('/register', registerTrainer);
 // 📌 Login as a trainer
 router.post('/login', loginTrainer);
 
-// 📌 Create a course (must include 9 sessions)
-router.post('/course', createCourse);
+const verifyToken = require('../auth');
 
-// 📌 Get all courses posted by the trainer
-router.get('/courses', getTrainerCourses);
+router.post('/course', verifyToken, createCourse);
+router.get('/courses', verifyToken, getTrainerCourses);
+
 
 module.exports = router;

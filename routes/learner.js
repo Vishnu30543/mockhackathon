@@ -17,6 +17,9 @@ router.post('/login', loginLearner);
 router.get('/courses', getCourses);
 
 // 📌 Give feedback to a course
-router.post('/feedback/:courseId', giveFeedback);
+const verifyToken = require('../auth');
+
+router.post('/feedback/:courseId', verifyToken, giveFeedback);
+
 
 module.exports = router;
