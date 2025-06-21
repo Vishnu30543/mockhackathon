@@ -68,3 +68,65 @@ exports.giveFeedback = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+// exports.createDiscussion = async (req, res) => {
+//   try {
+//     const { courseId } = req.params;
+//     const { title, content } = req.body;
+//     const learnerId = req.user.id;
+
+//     const course = await Course.findById(courseId);
+//     if (!course) return res.status(404).json({ message: 'Course not found' });
+
+//     course.discussions.push({
+//       title,
+//       content,
+//       creator: learnerId
+//     });
+
+//     await course.save();
+//     res.status(201).json({ message: 'Discussion created successfully' });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// };
+
+// exports.replyToDiscussion = async (req, res) => {
+//   try {
+//     const { courseId, discussionId } = req.params;
+//     const { comment } = req.body;
+//     const replierId = req.user.id;
+
+//     const course = await Course.findById(courseId);
+//     if (!course) return res.status(404).json({ message: 'Course not found' });
+
+//     const discussion = course.discussions.id(discussionId);
+//     if (!discussion) return res.status(404).json({ message: 'Discussion not found' });
+
+//     discussion.replies.push({
+//       comment,
+//       replier: replierId
+//     });
+
+//     await course.save();
+//     res.status(200).json({ message: 'Reply added successfully' });
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// };
+
+// exports.getCourseDiscussions = async (req, res) => {
+//   try {
+//     const { courseId } = req.params;
+
+//     const course = await Course.findById(courseId)
+//       .populate('discussions.creator', 'name email')
+//       .populate('discussions.replies.replier', 'name email');
+
+//     if (!course) return res.status(404).json({ message: 'Course not found' });
+
+//     res.status(200).json(course.discussions);
+//   } catch (err) {
+//     res.status(500).json({ error: err.message });
+//   }
+// };
